@@ -3,7 +3,7 @@
 [Read this in English](./README.md)
 
 <div align="center">
-<img src=logo.jpeg width="50%"/>
+<img src=logo.jpeg width="25%"/>
 </div>
 <p align="center">
  👋 加入我们的 <a href="https://discord.gg/5TuxSjJya6" target="_blank">Discord</a> 

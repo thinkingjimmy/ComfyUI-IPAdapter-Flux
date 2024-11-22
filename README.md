@@ -3,7 +3,7 @@
 [阅读中文版](./README_zh.md)
 
 <div align="center">
-<img src=logo.jpeg width="50%"/>
+<img src=logo.jpeg width="25%"/>
 </div>
 <p align="center">
  👋 Join our <a href="https://discord.gg/5TuxSjJya6" target="_blank">Discord</a> 
