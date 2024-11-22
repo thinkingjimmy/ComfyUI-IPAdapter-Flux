@@ -149,7 +149,7 @@
                     "type": "LATENT",
                     "links": null,
                     "shape": 3,
-                    "label": "降噪输出"
+                    "label": "Denoised_output"
                 }
             ],
             "properties": {
@@ -181,7 +181,7 @@
                         37
                     ],
                     "shape": 3,
-                    "label": "噪波生成"
+                    "label": "Noise"
                 }
             ],
             "properties": {
@@ -403,27 +403,16 @@
                     ],
                     "slot_index": 0,
                     "shape": 3,
-                    "label": "模型"
+                    "label": "Model"
                 }
             ],
             "properties": {
                 "Node name for S&R": "UNETLoader"
             },
             "widgets_values": [
-                "黑暗森林工作室-FLUX.1_FLUX.1-dev-fp8",
+                "FLUX.1-dev-fp8.safetensors",
                 "fp8_e4m3fn"
-            ],
-            "_widget_cache_map": {
-                "FLUX.1哩布在线可运行-黑暗森林工作室_FLUX.1-dev-fp8": {
-                    "name": "FLUX.1哩布在线可运行-黑暗森林工作室_FLUX.1-dev-fp8",
-                    "value": 2295774
-                },
-                "黑暗森林工作室-FLUX.1_FLUX.1-dev-fp8": {
-                    "name": "黑暗森林工作室-FLUX.1_FLUX.1-dev-fp8",
-                    "baseType": 19,
-                    "value": "412b427ddb674b4dbab9e5abd5ae6057"
-                }
-            }
+            ]
         },
         {
             "id": 80,
@@ -448,13 +437,13 @@
                         116
                     ],
                     "slot_index": 0,
-                    "label": "图像"
+                    "label": "Image"
                 },
                 {
                     "name": "MASK",
                     "type": "MASK",
                     "links": null,
-                    "label": "遮罩"
+                    "label": "Mask"
                 }
             ],
             "properties": {
@@ -579,14 +568,14 @@
                     "type": "MODEL",
                     "link": 131,
                     "slot_index": 0,
-                    "label": "模型"
+                    "label": "Model"
                 },
                 {
                     "name": "conditioning",
                     "type": "CONDITIONING",
                     "link": 130,
                     "slot_index": 1,
-                    "label": "条件"
+                    "label": "Conditioning"
                 }
             ],
             "outputs": [
@@ -598,7 +587,7 @@
                     ],
                     "slot_index": 0,
                     "shape": 3,
-                    "label": "引导"
+                    "label": "Guider"
                 }
             ],
             "properties": {
@@ -645,7 +634,7 @@
                         9
                     ],
                     "slot_index": 0,
-                    "label": "图像"
+                    "label": "Image"
                 }
             ],
             "properties": {
@@ -673,7 +662,7 @@
                     "name": "images",
                     "type": "IMAGE",
                     "link": 9,
-                    "label": "图像"
+                    "label": "Image"
                 }
             ],
             "outputs": [],
