@@ -1,6 +1,6 @@
 # ComfyUI-IPAdapter-Flux
 
-[阅读中文版](./README_CN.md)
+[阅读中文版](./README_zh.md)
 
 <div align="center">
 <img src=logo.jpeg width="50%"/>
@@ -31,7 +31,7 @@
 [Reference Workflow](./workflows/ipadapter_example.json)
 
 <div align="center">
-<img src=./ipadapter_example.png width="100%"/>
+<img src=./workflows/ipadapter_example.png width="100%"/>
 </div>
 
 ### Online Experience

@@ -31,7 +31,7 @@
 [参考工作流](./workflows/ipadapter_example.json)
 
 <div align="center">
-<img src=./ipadapter_example.png width="100%"/>
+<img src=./workflows/ipadapter_example.png width="100%"/>
 </div>
 
 ### 在线体验
