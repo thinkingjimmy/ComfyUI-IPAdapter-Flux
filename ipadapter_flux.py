@@ -46,7 +46,7 @@ class InstantXFluxIPAdapterModel:
         self.image_encoder = SiglipVisionModel.from_pretrained(self.image_encoder_path).to(self.device, dtype=torch.bfloat16)
         self.clip_image_processor = AutoProcessor.from_pretrained(self.image_encoder_path)
         # state_dict
-        self.state_dict = torch.load(self.ip_ckpt, map_location="cpu")
+        self.state_dict = torch.load(os.path.join(MODELS_DIR,self.ip_ckpt), map_location="cpu")
         self.joint_attention_dim = 4096
         self.hidden_size = 3072
 
