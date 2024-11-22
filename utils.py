@@ -46,7 +46,9 @@ def forward_orig_ipa(
     y: Tensor,
     guidance: Tensor = None,
     control=None,
+    transformer_options={},
 ) -> Tensor:
+    patches_replace = transformer_options.get("patches_replace", {})
     if img.ndim != 3 or txt.ndim != 3:
         raise ValueError("Input img and txt tensors must have 3 dimensions.")
 
@@ -58,17 +60,30 @@ def forward_orig_ipa(
             raise ValueError("Didn't get guidance strength for guidance distilled model.")
         vec = vec + self.guidance_in(timestep_embedding(guidance, 256).to(img.dtype))
 
-    vec = vec + self.vector_in(y)
+    vec = vec + self.vector_in(y[:,:self.params.vec_in_dim])
     txt = self.txt_in(txt)
 
     ids = torch.cat((txt_ids, img_ids), dim=1)
     pe = self.pe_embedder(ids)
 
+    blocks_replace = patches_replace.get("dit", {})
     for i, block in enumerate(self.double_blocks):
-        if isinstance(block, DoubleStreamBlockIPA): # ipadaper 
-            img, txt = block(img=img, txt=txt, vec=vec, pe=pe, t=timesteps)
+        if ("double_block", i) in blocks_replace:
+            def block_wrap(args):
+                out = {}
+                if isinstance(block, DoubleStreamBlockIPA): # ipadaper 
+                    out["img"], out["txt"] = block(img=args["img"], txt=args["txt"], vec=args["vec"], pe=args["pe"], t=args["timesteps"])
+                else:
+                    out["img"], out["txt"] = block(img=args["img"], txt=args["txt"], vec=args["vec"], pe=args["pe"])
+                return out
+            out = blocks_replace[("double_block", i)]({"img": img, "txt": txt, "vec": vec, "pe": pe, "timesteps": timesteps}, {"original_block": block_wrap})
+            txt = out["txt"]
+            img = out["img"]
         else:
-            img, txt = block(img=img, txt=txt, vec=vec, pe=pe)
+            if isinstance(block, DoubleStreamBlockIPA): # ipadaper 
+                img, txt = block(img=img, txt=txt, vec=vec, pe=pe, t=timesteps)
+            else:
+                img, txt = block(img=img, txt=txt, vec=vec, pe=pe)
 
         if control is not None: # Controlnet
             control_i = control.get("input")
@@ -80,10 +95,22 @@ def forward_orig_ipa(
     img = torch.cat((txt, img), 1)
 
     for i, block in enumerate(self.single_blocks):
-        if isinstance(block, SingleStreamBlockIPA): # ipadaper
-            img = block(img, vec=vec, pe=pe, t=timesteps)
+        if ("single_block", i) in blocks_replace:
+            def block_wrap(args):
+                out = {}
+                if isinstance(block, SingleStreamBlockIPA): # ipadaper
+                    out["img"] = block(args["img"], vec=args["vec"], pe=args["pe"], t=args["timesteps"])
+                else:
+                    out["img"] = block(args["img"], vec=args["vec"], pe=args["pe"])
+                return out
+
+            out = blocks_replace[("single_block", i)]({"img": img, "vec": vec, "pe": pe, "timesteps": timesteps}, {"original_block": block_wrap})
+            img = out["img"]
         else:
-            img = block(img, vec=vec, pe=pe)
+            if isinstance(block, SingleStreamBlockIPA): # ipadaper
+                img = block(img, vec=vec, pe=pe, t=timesteps)
+            else:
+                img = block(img, vec=vec, pe=pe)
 
         if control is not None: # Controlnet
             control_o = control.get("output")
