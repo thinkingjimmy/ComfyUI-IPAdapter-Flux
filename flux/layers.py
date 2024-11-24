@@ -3,6 +3,7 @@ from torch import Tensor, nn
 
 from .math import attention
 from comfy.ldm.flux.layers import DoubleStreamBlock, SingleStreamBlock
+import comfy.model_management
 
 class DoubleStreamBlockIPA(nn.Module):
     def __init__(self, original_block: DoubleStreamBlock, ip_adapter, image_emb):
@@ -29,6 +30,7 @@ class DoubleStreamBlockIPA(nn.Module):
 
         self.ip_adapter = ip_adapter
         self.image_emb = image_emb
+        self.device = comfy.model_management.get_torch_device()
     
     def forward(self, img: Tensor, txt: Tensor, vec: Tensor, pe: Tensor, t: Tensor):
         img_mod1, img_mod2 = self.img_mod(vec)
@@ -55,7 +57,7 @@ class DoubleStreamBlockIPA(nn.Module):
 
         txt_attn, img_attn = attn[:, : txt.shape[1]], attn[:, txt.shape[1] :]
 
-        ip_hidden_states = self.ip_adapter(self.num_heads, img_q, self.image_emb, t)
+        ip_hidden_states = self.ip_adapter(self.num_heads, img_q, self.image_emb, t).to(self.device)
         if ip_hidden_states is not None:
             img_attn = img_attn + ip_hidden_states
 
@@ -100,6 +102,7 @@ class SingleStreamBlockIPA(nn.Module):
 
         self.ip_adapter = ip_adapter
         self.image_emb = image_emb
+        self.device = comfy.model_management.get_torch_device()
 
     def forward(self, x: Tensor, vec: Tensor, pe: Tensor, t:Tensor) -> Tensor:
         mod, _ = self.modulation(vec)
@@ -112,7 +115,7 @@ class SingleStreamBlockIPA(nn.Module):
         # compute attention
         attn = attention(q, k, v, pe=pe)
 
-        ip_hidden_states = self.ip_adapter(self.num_heads, q, self.image_emb, t)
+        ip_hidden_states = self.ip_adapter(self.num_heads, q, self.image_emb, t).to(self.device)
         if ip_hidden_states is not None:
             attn = attn + ip_hidden_states
         # compute activation in mlp stream, cat again and run second linear layer

@@ -43,7 +43,7 @@ class InstantXFluxIPAdapterModel:
         self.ip_ckpt = ip_ckpt
         self.num_tokens = num_tokens
         # load image encoder
-        self.image_encoder = SiglipVisionModel.from_pretrained(self.image_encoder_path).to(self.device, dtype=torch.bfloat16)
+        self.image_encoder = SiglipVisionModel.from_pretrained(self.image_encoder_path).to(self.device, dtype=torch.float16)
         self.clip_image_processor = AutoProcessor.from_pretrained(self.image_encoder_path)
         # state_dict
         self.state_dict = torch.load(os.path.join(MODELS_DIR,self.ip_ckpt), map_location="cpu")
@@ -55,7 +55,7 @@ class InstantXFluxIPAdapterModel:
             cross_attention_dim=self.joint_attention_dim, # 4096
             id_embeddings_dim=1152, 
             num_tokens=self.num_tokens,
-        ).to(self.device, dtype=torch.bfloat16)
+        ).to(self.device, dtype=torch.float16)
 
     def set_ip_adapter(self, flux_model, weight, timestep_percent_range=(0.0, 1.0)):
         s = flux_model.model_sampling
@@ -71,7 +71,7 @@ class InstantXFluxIPAdapterModel:
                     num_tokens=self.num_tokens,
                     scale = weight,
                     timestep_range = timestep_range
-                ).to(self.device, dtype=torch.bfloat16)
+                ).to(self.device, dtype=torch.float16)
         ssb_count = len(flux_model.diffusion_model.single_blocks)
         for i in range(ssb_count):
             name = f"single_blocks.{i}"
@@ -81,7 +81,7 @@ class InstantXFluxIPAdapterModel:
                     num_tokens=self.num_tokens,
                     scale = weight,
                     timestep_range = timestep_range
-                ).to(self.device, dtype=torch.bfloat16)
+                ).to(self.device, dtype=torch.float16)
         return ip_attn_procs
     
     def load_ip_adapter(self, flux_model, weight, timestep_percent_range=(0.0, 1.0)):
@@ -98,9 +98,9 @@ class InstantXFluxIPAdapterModel:
                 pil_image = [pil_image]
             clip_image = self.clip_image_processor(images=pil_image, return_tensors="pt").pixel_values
             clip_image_embeds = self.image_encoder(clip_image.to(self.device, dtype=self.image_encoder.dtype)).pooler_output
-            clip_image_embeds = clip_image_embeds.to(dtype=torch.bfloat16)
+            clip_image_embeds = clip_image_embeds.to(dtype=torch.float16)
         else:
-            clip_image_embeds = clip_image_embeds.to(self.device, dtype=torch.bfloat16)
+            clip_image_embeds = clip_image_embeds.to(self.device, dtype=torch.float16)
         image_prompt_embeds = self.image_proj_model(clip_image_embeds)
         return image_prompt_embeds
 
@@ -110,7 +110,7 @@ class IPAdapterFluxLoader:
         return {"required": {
                 "ipadapter": (folder_paths.get_filename_list("ipadapter-flux"),),
                 "clip_vision": (["google/siglip-so400m-patch14-384"],),
-                "provider": (["cuda", "cpu"],),
+                "provider": (["cuda", "cpu", "mps"],),
             }
         }
     RETURN_TYPES = ("IP_ADAPTER_FLUX_INSTANTX",)
