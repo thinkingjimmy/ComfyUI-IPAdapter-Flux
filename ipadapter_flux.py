@@ -155,8 +155,7 @@ class ApplyIPAdapterFlux:
         # set model
         is_patched = is_model_pathched(model.model)
         bi = model.clone()
-        tyanochky = bi.model
-        FluxUpdateModules(tyanochky, ip_attn_procs, image_prompt_embeds, is_patched)
+        FluxUpdateModules(bi, ip_attn_procs, image_prompt_embeds, is_patched)
         return (bi,)
 
 NODE_CLASS_MAPPINGS = {
