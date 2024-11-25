@@ -12,8 +12,13 @@
  📍 Visit <a href="https://www.shakker.ai/shakker-generator">shakker-generator</a> and <a href="https://www.shakker.ai/online-comfyui">Online ComfyUI</a> to experience the online FLUX.1-dev-IP-Adapter.
 </p>
 
+## Highlight
+
+Please update your ComfyUI to commit `2fd9c13`.
+
 ## Project Updates
 
+- **Update**: ```2024/11/25```: Adapted to the latest version of ComfyUI. Tested on ComfyUI commit `2fd9c13`, weights can now be successfully loaded and unloaded.  
 - 🌱 **Source**: ```2024/11/22```: We have open-sourced FLUX.1-dev-IP-Adapter, an IPAdapter model based on FLUX.1 dev. You can access the [ipadapter weights](https://huggingface.co/InstantX/FLUX.1-dev-IP-Adapter).
 
 ## Quick Start

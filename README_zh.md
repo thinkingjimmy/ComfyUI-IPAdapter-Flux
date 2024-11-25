@@ -12,8 +12,13 @@
  📍 前往<a href="https://www.shakker.ai/shakker-generator"> shakker-generator </a> 和 <a href="https://www.shakker.ai/online-comfyui"> Online ComfyUI</a> 体验在线的FLUX.1-dev-IP-Adapter。
 </p>
 
+## 重要提示
+
+请升级到 ComfyUI commit `2fd9c13` 之后的版本。  
+
 ## 项目更新
 
+- **update**: ```2024/11/25```: 适配comfyui最新版本，在comfyui commit `2fd9c13` 上测试，可以正常加卸载权重。
 - 🌱 **Source**: ```2024/11/22```: 我们开源了FLUX.1-dev-IP-Adapter，这是基于FLUX.1 dev的IPAdapter模型，您可以访问 [ipadapter 权重](https://huggingface.co/InstantX/FLUX.1-dev-IP-Adapter) 。
 
 ## 快速开始
