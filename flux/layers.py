@@ -29,9 +29,13 @@ class DoubleStreamBlockIPA(nn.Module):
         self.txt_norm2 = original_block.txt_norm2
         self.txt_mlp = original_block.txt_mlp
 
-        self.ip_adapter = ip_adapter
-        self.image_emb = image_emb
+        self.ip_adapter = [ip_adapter]
+        self.image_emb = [image_emb]
         self.device = comfy.model_management.get_torch_device()
+
+    def add_adapter(self, ip_adapter: IPAFluxAttnProcessor2_0, image_emb):
+        self.ip_adapter.append(ip_adapter)
+        self.image_emb.append(image_emb)
     
     def forward(self, img: Tensor, txt: Tensor, vec: Tensor, pe: Tensor, t: Tensor):
         img_mod1, img_mod2 = self.img_mod(vec)
@@ -58,9 +62,11 @@ class DoubleStreamBlockIPA(nn.Module):
 
         txt_attn, img_attn = attn[:, : txt.shape[1]], attn[:, txt.shape[1] :]
 
-        ip_hidden_states = self.ip_adapter(self.num_heads, img_q, self.image_emb, t)
-        if ip_hidden_states is not None:
-            ip_hidden_states = ip_hidden_states.to(self.device)
+        for adapter, image in zip(self.ip_adapter, self.image_emb):
+            # this does a separate attention for each adapter
+            ip_hidden_states = adapter(self.num_heads, img_q, image, t)
+            if ip_hidden_states is not None:
+                ip_hidden_states = ip_hidden_states.to(self.device)
             img_attn = img_attn + ip_hidden_states
 
         # calculate the img bloks
@@ -102,9 +108,13 @@ class SingleStreamBlockIPA(nn.Module):
         self.mlp_act = original_block.mlp_act
         self.modulation = original_block.modulation
 
-        self.ip_adapter = ip_adapter
-        self.image_emb = image_emb
+        self.ip_adapter = [ip_adapter]
+        self.image_emb = [image_emb]
         self.device = comfy.model_management.get_torch_device()
+
+    def add_adapter(self, ip_adapter: IPAFluxAttnProcessor2_0, image_emb):
+        self.ip_adapter.append(ip_adapter)
+        self.image_emb.append(image_emb)
 
     def forward(self, x: Tensor, vec: Tensor, pe: Tensor, t:Tensor) -> Tensor:
         mod, _ = self.modulation(vec)
@@ -117,10 +127,14 @@ class SingleStreamBlockIPA(nn.Module):
         # compute attention
         attn = attention(q, k, v, pe=pe)
 
-        ip_hidden_states = self.ip_adapter(self.num_heads, q, self.image_emb, t)
-        if ip_hidden_states is not None:
-            ip_hidden_states = ip_hidden_states.to(self.device)
+        for adapter, image in zip(self.ip_adapter, self.image_emb):
+            # this does a separate attention for each adapter
+            # maybe we want a single joint attention call for all adapters?
+            ip_hidden_states = adapter(self.num_heads, q, image, t)
+            if ip_hidden_states is not None:
+                ip_hidden_states = ip_hidden_states.to(self.device)
             attn = attn + ip_hidden_states
+
         # compute activation in mlp stream, cat again and run second linear layer
         output = self.linear2(torch.cat((attn, self.mlp_act(mlp)), 2))
         x += mod.gate * output
