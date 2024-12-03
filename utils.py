@@ -18,7 +18,7 @@ def FluxUpdateModules(bi, ip_attn_procs, image_emb, is_patched):
         temp_layer=SingleStreamBlockIPA(flux_model.diffusion_model.single_blocks[i],ip_attn_procs[f"single_blocks.{i}"],image_emb)
         bi.add_object_patch(f"diffusion_model.single_blocks.{i}",temp_layer)
         
-def is_model_pathched(model):
+def is_model_patched(model):
     def test(mod):
         if isinstance(mod, DoubleStreamBlockIPA):
             return True
