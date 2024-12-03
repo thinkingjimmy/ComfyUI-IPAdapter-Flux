@@ -67,7 +67,7 @@ class DoubleStreamBlockIPA(nn.Module):
             ip_hidden_states = adapter(self.num_heads, img_q, image, t)
             if ip_hidden_states is not None:
                 ip_hidden_states = ip_hidden_states.to(self.device)
-            img_attn = img_attn + ip_hidden_states
+                img_attn = img_attn + ip_hidden_states
 
         # calculate the img bloks
         img = img + img_mod1.gate * self.img_attn.proj(img_attn)
@@ -133,7 +133,7 @@ class SingleStreamBlockIPA(nn.Module):
             ip_hidden_states = adapter(self.num_heads, q, image, t)
             if ip_hidden_states is not None:
                 ip_hidden_states = ip_hidden_states.to(self.device)
-            attn = attn + ip_hidden_states
+                attn = attn + ip_hidden_states
 
         # compute activation in mlp stream, cat again and run second linear layer
         output = self.linear2(torch.cat((attn, self.mlp_act(mlp)), 2))
