@@ -38,7 +38,7 @@ def forward_orig_ipa(
     txt_ids: Tensor,
     timesteps: Tensor,
     y: Tensor,
-    guidance: Tensor = None,
+    guidance: Tensor|None = None,
     control=None,
     transformer_options={},
 ) -> Tensor:
