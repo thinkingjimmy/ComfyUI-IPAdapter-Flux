@@ -7,7 +7,7 @@ from ..attention_processor import IPAFluxAttnProcessor2_0
 import comfy.model_management
 
 class DoubleStreamBlockIPA(nn.Module):
-    def __init__(self, original_block: DoubleStreamBlock, ip_adapter: IPAFluxAttnProcessor2_0, image_emb):
+    def __init__(self, original_block: DoubleStreamBlock, ip_adapter: list[IPAFluxAttnProcessor2_0], image_emb):
         super().__init__()
 
         mlp_hidden_dim  = original_block.img_mlp[0].out_features
@@ -29,8 +29,8 @@ class DoubleStreamBlockIPA(nn.Module):
         self.txt_norm2 = original_block.txt_norm2
         self.txt_mlp = original_block.txt_mlp
 
-        self.ip_adapter = [ip_adapter]
-        self.image_emb = [image_emb]
+        self.ip_adapter = ip_adapter
+        self.image_emb = image_emb
         self.device = comfy.model_management.get_torch_device()
 
     def add_adapter(self, ip_adapter: IPAFluxAttnProcessor2_0, image_emb):
@@ -88,7 +88,7 @@ class SingleStreamBlockIPA(nn.Module):
     https://arxiv.org/abs/2302.05442 and adapted modulation interface.
     """
 
-    def __init__(self, original_block: SingleStreamBlock, ip_adapter: IPAFluxAttnProcessor2_0, image_emb):
+    def __init__(self, original_block: SingleStreamBlock, ip_adapter: list[IPAFluxAttnProcessor2_0], image_emb):
         super().__init__()
         self.hidden_dim = original_block.hidden_size
         self.num_heads = original_block.num_heads
@@ -108,8 +108,8 @@ class SingleStreamBlockIPA(nn.Module):
         self.mlp_act = original_block.mlp_act
         self.modulation = original_block.modulation
 
-        self.ip_adapter = [ip_adapter]
-        self.image_emb = [image_emb]
+        self.ip_adapter = ip_adapter
+        self.image_emb = image_emb
         self.device = comfy.model_management.get_torch_device()
 
     def add_adapter(self, ip_adapter: IPAFluxAttnProcessor2_0, image_emb):
