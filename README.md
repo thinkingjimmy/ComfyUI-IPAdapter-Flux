@@ -18,6 +18,7 @@ Please update your ComfyUI to commit `2fd9c13`.
 
 ## Project Updates
 
+- **update**: ```2024/12/10```: Support multiple ipadapter, thanks to <a href="https://github.com/Slickytail">Slickytail.
 - **Update**: ```2024/11/25```: Adapted to the latest version of ComfyUI. Tested on ComfyUI commit `2fd9c13`, weights can now be successfully loaded and unloaded.  
 - 🌱 **Source**: ```2024/11/22```: We have open-sourced FLUX.1-dev-IP-Adapter, an IPAdapter model based on FLUX.1 dev. You can access the [ipadapter weights](https://huggingface.co/InstantX/FLUX.1-dev-IP-Adapter).
 
