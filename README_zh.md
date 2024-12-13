@@ -40,6 +40,18 @@
 <img src=./workflows/ipadapter_example.png width="100%"/>
 </div>
 
+[调节开始和结束步数](./workflows/ipadapter_example_start_end_percent.json)
+
+<div align="center">
+<img src=./workflows/ipadapter_example_start_end_percent.png width="100%"/>
+</div>
+
+[使用多张参考图](./workflows/multi-ipadapter_example.json)
+
+<div align="center">
+<img src=./workflows/multi-ipadapter_example.png width="100%"/>
+</div>
+
 ### 在线体验
 
 您可以使用[shakker-generator](https://www.shakker.ai/shakker-generator)和[Online ComfyUI](https://www.shakker.ai/online-comfyui)体验在线的FLUX.1-dev-IP-Adapter

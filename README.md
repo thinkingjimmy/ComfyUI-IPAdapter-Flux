@@ -40,6 +40,18 @@ Please update your ComfyUI to commit `2fd9c13`.
 <img src=./workflows/ipadapter_example.png width="100%"/>
 </div>
 
+[Reference Workflow](./workflows/ipadapter_example.json)
+
+<div align="center">
+<img src=./workflows/ipadapter_example.png width="100%"/>
+</div>
+
+[Reference Workflow](./workflows/ipadapter_example.json)
+
+<div align="center">
+<img src=./workflows/ipadapter_example.png width="100%"/>
+</div>
+
 ### Online Experience
 
 You can try the online FLUX.1-dev-IP-Adapter using [shakker-generator](https://www.shakker.ai/shakker-generator) and [Online ComfyUI](https://www.shakker.ai/online-comfyui).
