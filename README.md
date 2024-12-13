@@ -40,16 +40,16 @@ Please update your ComfyUI to commit `2fd9c13`.
 <img src=./workflows/ipadapter_example.png width="100%"/>
 </div>
 
-[Reference Workflow](./workflows/ipadapter_example.json)
+[Adjust start step and end step](./workflows/ipadapter_example_start_end_percent.json)
 
 <div align="center">
-<img src=./workflows/ipadapter_example.png width="100%"/>
+<img src=./workflows/ipadapter_example_start_end_percent.png width="100%"/>
 </div>
 
-[Reference Workflow](./workflows/ipadapter_example.json)
+[Use multiple ipadapter with multiple images](./workflows/multi-ipadapter_example.json)
 
 <div align="center">
-<img src=./workflows/ipadapter_example.png width="100%"/>
+<img src=./workflows/multi-ipadapter_example.png width="100%"/>
 </div>
 
 ### Online Experience
