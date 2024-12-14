@@ -108,18 +108,18 @@ class IPAdapterFluxLoader:
     def INPUT_TYPES(s):
         return {"required": {
                 "ipadapter": (folder_paths.get_filename_list("ipadapter-flux"),),
-                "clip_vision": (["google/siglip-so400m-patch14-384"],),
                 "provider": (["cuda", "cpu", "mps"],),
+                }
             }
-        }
     RETURN_TYPES = ("IP_ADAPTER_FLUX_INSTANTX",)
     RETURN_NAMES = ("ipadapterFlux",)
     FUNCTION = "load_model"
     CATEGORY = "InstantXNodes"
 
-    def load_model(self, ipadapter, clip_vision, provider):
+    def load_model(self, ipadapter, provider):
         logging.info("Loading InstantX IPAdapter Flux model.")
-        model = InstantXFluxIPAdapterModel(image_encoder_path=clip_vision, ip_ckpt=ipadapter, device=provider, num_tokens=128)
+        clip_path = os.path.join(folder_paths.models_dir, "clip", "siglip-so400m-patch14-384")
+        model = InstantXFluxIPAdapterModel(image_encoder_path=clip_path, ip_ckpt=ipadapter, device=provider, num_tokens=128)
         return (model,)
 
 class ApplyIPAdapterFlux:
